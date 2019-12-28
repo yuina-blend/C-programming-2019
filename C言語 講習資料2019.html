@@ -540,6 +540,8 @@ void 0!==arguments[0]&&(br.sequenceConfig=arguments[0]),e=arguments[1]):e=argume
 <ul>
 <li><a href="#%e3%83%a1%e3%83%a2%e3%83%aa%e3%81%a8%e3%82%a2%e3%83%89%e3%83%ac%e3%82%b9">メモリとアドレス</a></li>
 <li><a href="#%e3%83%9d%e3%82%a4%e3%83%b3%e3%82%bf">ポインタ</a></li>
+<li><a href="#%e9%96%93%e6%8e%a5%e6%bc%94%e7%ae%97%e5%ad%90">間接演算子</a></li>
+<li><a href="#%e4%be%8b%e9%a1%8c8-1">例題8-1</a></li>
 <li><a href="#%e5%80%a4%e6%b8%a1%e3%81%97%e3%81%a8%e5%8f%82%e7%85%a7%e6%b8%a1%e3%81%97">値渡しと参照渡し</a></li>
 <li><a href="#%e9%85%8d%e5%88%97%e3%81%a8%e3%83%9d%e3%82%a4%e3%83%b3%e3%82%bf">配列とポインタ</a></li>
 </ul>
@@ -1828,8 +1830,77 @@ a[1][1] = 0
 <div style="page-break-before:always"></div>
 <h1 id="%E7%AC%AC8%E7%AB%A0-%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A8%E3%83%9D%E3%82%A4%E3%83%B3%E3%82%BF">第8章 アドレスとポインタ</h1>
 <h2 id="%E3%83%A1%E3%83%A2%E3%83%AA%E3%81%A8%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9">メモリとアドレス</h2>
-<p>ます、ポインタを勉強する前に<strong>メモリ</strong>について勉強しましょう。</p>
+<p><strong>メモリ</strong>とは値を保持しておくためのものです。例えば<code>int a</code>という変数を宣言すると、メモリ上のどこかに4Byte分のメモリが確保されます。また、メモリ上のどこに保存されているかを示す番号のことを<strong>アドレス</strong>と言います。</p>
+<p>変数のアドレスを知るには、<code>&amp;（アドレス演算子）</code>というものを使います。例を見てみましょう。</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">int</span> a = <span class="hljs-number">1</span>;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"val=%d add=%p"</span>,a,&amp;a);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</div></code></pre>
+<ul>
+<li>実行結果</li>
+</ul>
+<pre class="hljs"><code><div>val=1 add=0061FF1C
+</div></code></pre>
+<p>アドレスの書式指定子は<code>%p</code>です。<code>a</code>の値は<code>1</code>、<code>&amp;a（aのアドレス）</code>は<code>0061FF1C</code>というようにそれぞれ出力されています。</p>
+<p><img src="image/2019-12-28-18-18-06.png" height=200></img></p>
+<p>図で表すとこんな感じです。</p>
+<p><strong>アドレスはメモリの場所を表す番号</strong>ということを覚えておきましょう。</p>
 <h2 id="%E3%83%9D%E3%82%A4%E3%83%B3%E3%82%BF">ポインタ</h2>
+<p><strong>ポインタ</strong>とは、<strong>アドレスを保持できる変数</strong>のことです。</p>
+<p>宣言は</p>
+<pre class="hljs"><code><div>型名 *変数名;
+</div></code></pre>
+<p>で、おこなうことができます。型は代入するアドレスの先の変数の型と同じにしましょう。また、宣言時には<code>*ptr</code>というように宣言しますが、この変数の名前は<code>ptr</code>になるので注意しましょう。</p>
+<p>例えば<code>int a</code>という変数があり、このアドレスをポインタに代入する場所は</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">int</span> a = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">int</span> *ptr = &amp;a;
+</div></code></pre>
+<p>というようになります。</p>
+<h2 id="%E9%96%93%E6%8E%A5%E6%BC%94%E7%AE%97%E5%AD%90">間接演算子</h2>
+<p>ポインタの宣言とアドレスの代入によって、ある変数のアドレスを持ったポインタ変数ができること学びました。しかし、これだけではアドレスをもった変数ができただけで何も意味がありません。</p>
+<p>そこで、<code>*（間接演算子）</code>というものを使います。</p>
+<p>これはポインタ変数の前に付けることで、<strong>そのポインタがもつアドレスの先の変数</strong>を扱うことができます。例を見てみましょう。</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">int</span> a = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">int</span> *ptr = &amp;a;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"a=%d &amp;a=%p ptr=%p *ptr=%d"</span>,a,&amp;a,ptr,*ptr);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</div></code></pre>
+<ul>
+<li>実行結果</li>
+</ul>
+<pre class="hljs"><code><div>a=1 &amp;a=0061FF18 ptr=0061FF18 *ptr=1
+</div></code></pre>
+<p>このように、<code>a</code>のアドレスをもつ<code>ptr</code>に<code>*</code>をつけることで、*ptrを出力すると<strong>ptrの持つアドレスの先のaの値</strong>が出力されています。</p>
+<p>よって、</p>
+<p><font size=5>a と *ptr は同値である</font></p>
+<p>と、いうことができます。</p>
+<h2 id="%E4%BE%8B%E9%A1%8C8-1">例題8-1</h2>
+<p><strong>問題文</strong></p>
+<p>任意の変数とそのアドレスを持つポインタを宣言し、間接演算子を用いてその変数に<code>100</code>を代入し、出力してください。</p>
+<p><strong>解答例</strong></p>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">int</span> a = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">int</span> *ptr = &amp;a;
+    *ptr = <span class="hljs-number">100</span>; <span class="hljs-comment">//ここでptrの指す先(a)に100を代入</span>
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"a=%d"</span>,a);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</div></code></pre>
+<p><strong>解説</strong></p>
+<p><code>*ptr</code>が指す先は<code>a</code>なので、<code>*ptr = 100</code>は<code>a = 100</code>と同じ意味になります。</p>
 <h2 id="%E5%80%A4%E6%B8%A1%E3%81%97%E3%81%A8%E5%8F%82%E7%85%A7%E6%B8%A1%E3%81%97">値渡しと参照渡し</h2>
 <h2 id="%E9%85%8D%E5%88%97%E3%81%A8%E3%83%9D%E3%82%A4%E3%83%B3%E3%82%BF">配列とポインタ</h2>
 <div style="page-break-before:always"></div>
